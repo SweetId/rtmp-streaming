@@ -21,6 +21,7 @@ npm install
 npm start
 ```
 
-Open your browser in `localhost:3000`
-
-Backend is accessible at `localhost:8000`
+* Start stream with OBS or any other streaming software
+* Stream to `rtmp://yourip/live` with stream key `live`
+* Video player is at `yourip:3000`
+* Server backend is at `yourip:8000`
