@@ -9,7 +9,7 @@ Streaming front-end and back-end built on top of nodejs and node-media-server
     Download here: https://nodejs.org/en/download/
 
 # How to use it
-Clone this repository or [download](https://https://github.com/SweetId/rtmp-streaming/archive/master.zip) the code.
+Clone this repository or [download](https://github.com/SweetId/rtmp-streaming/archive/master.zip) the code.
 
 Open the project folder in **terminal** and run:
 
