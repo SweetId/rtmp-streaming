@@ -101,6 +101,11 @@ server.listen(3000, '0.0.0.0', () => {
   app.set('view engine', 'ejs');
   app.set('views', 'pages');
 
-  app.get('/', (req, res) => {
-    res.render('index', { title: 'CyaTV!' });
+  app.get('/:live', (req, res) => {
+    res.render('index', { title:  req.params.live + ' TV' });
+  });
+
+  // used by video.js to retrieve server ip
+  app.get('/:live/ip', (req, res) => {
+    res.json({ path: 'ws://' + ip() + ':' + config.http.port + '/live/' + req.params.live + '.flv' });
   });

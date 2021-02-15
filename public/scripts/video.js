@@ -1,6 +1,8 @@
 
 var flvPlayer = null;
 var bPlaying = false;
+var video_ip = "localhost";
+var video_port = "3000";
 
 function play_pause() {
 	if (bPlaying)
@@ -39,7 +41,7 @@ function play() {
 			flvPlayer = flvjs.createPlayer({
 				type: 'flv',
 				isLive: true,
-				url: 'ws://localhost:8000/live/live.flv'
+				url: video_path
 			});
 		} catch(error)
 		{
@@ -71,5 +73,12 @@ function pause() {
 }
 
 $(document).ready(function() {
-	play_pause();
+	// Retrieve video ip from server
+	var live = window.location.pathname;
+	console.log('Retrieving live ip for ' + live);
+	$.get( live + '/ip', function( data ) {
+		video_path = data.path;
+		console.log('Connecting to ' + video_path);
+		play_pause();
+	});
 });
