@@ -1,0 +1,56 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#videoarea {
+	display: inline-block;
+	vertical-align: top;
+	width: 70%;
+	margin: 1em 1em 1em 1em;
+}
+
+#videoarea video {
+	width: auto;
+	overflow: hidden;
+}
+
+#chatarea {
+	display: inline-block;
+	vertical-align: top;
+	width: 25%;
+	height: 100%;
+}
+
+#chatarea h1 {
+	text-align: right;
+}
+
+#chatarea-messages {
+	min-height: 60%;
+	height: 60%;
+	list-style: none;
+	overflow:hidden;
+	overflow-y:scroll;
+}
+
+.chatarea-username {
+	color: #FF7F00;
+	font-weight: bold;
+}
+
+#chatarea-controls {
+
+}
+
+#chatarea-controls textarea {
+
+}
+
+#chatarea-controls button {
+	height: 100%;
+	width: 4em;
+}

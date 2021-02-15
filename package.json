@@ -1,0 +1,29 @@
+{
+  "name": "rtmp-streaming",
+  "version": "1.0.0",
+  "description": "Frontend and backend for RTMP streaming",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SweetId/rtmp-streaming.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SweetId/rtmp-streaming/issues"
+  },
+  "homepage": "https://github.com/SweetId/rtmp-streaming#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "my-ip": "^1.1.1",
+    "node-media-server": "^2.2.4",
+    "socket.io": "^3.1.1"
+  }
+}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title><%= title %></title>
+		<script src="https://cdn.bootcss.com/flv.js/1.5.0/flv.min.js"></script>
+		<link href="/css/index.css" rel="stylesheet">
+	</head>
+	<body>
+		<article id="videoarea">
+			<video id="videoElement" autoplay muted>Offline.</video>
+			<div id="controls">
+				<button id="play_button" onclick="play_pause()">Play/Pause</button>
+				<button id="mute_button" onclick="mute_unmute()">Mute/Unmute</button>
+				<p>Volume: <input type="range" min="1" max="100" value="80" oninput="set_volume(this.value)"></p>
+			</div>
+		</article>
+		<article id="chatarea">
+			<h1>CHATROOM</h1>
+			<ul id="chatarea-messages">
+			</ul>
+			<div id="chatarea-username">
+				<input id="chatarea-user" type="text">
+				<button id="chatarea-login">Login</button>
+			</div>
+			<div id="chatarea-controls">
+				<textarea id="chatarea-text"></textarea>
+				<button id="chatarea-send">Send</button>
+			</div>
+		</article>
+	</body>
+	<script src="/scripts/jquery-3.5.1.min.js"></script>
+  	<script src="/socket.io/socket.io.js"></script>
+	<script src="/scripts/video.js"></script>
+	<script src="/scripts/chat.js"></script>
+</html>
