@@ -81,9 +81,14 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 io.on('connection', (socket) => {
+  var current_room = 'none';
+  socket.on('join room', function(room) {
+    current_room = room;
+    socket.join(current_room);
+  });
+
   socket.on('new message', function(usr, msg) {
-    console.log(usr + ': ' + msg);
-    socket.broadcast.emit('new message', { username: usr, content: msg });
+    socket.to(current_room).emit('new message', { username: usr, content: msg });
   })
 });
 

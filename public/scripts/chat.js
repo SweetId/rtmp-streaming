@@ -21,6 +21,9 @@ $(document).ready(function() {
 			$("#chatarea-username").hide();
 			$("#chatarea-controls").show();
 
+			var live = window.location.pathname;
+			socket.emit("join room", live);
+
 			// Whenever the server emits 'new message', update the chat body
 			socket.on("new message", function(data) {
 				addChatMessage(data);
