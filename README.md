@@ -22,6 +22,6 @@ npm start
 ```
 
 * Start stream with OBS or any other streaming software
-* Stream to `rtmp://yourip/live` with stream key `live`
-* Video player is at `yourip:3000`
+* Stream to `rtmp://yourip/live` with any stream key (i.e `my_room`)
+* Video player is at `yourip:3000/yourstreamkey` (i.e `yourip:3000/my_room`)
 * Server backend is at `yourip:8000`
