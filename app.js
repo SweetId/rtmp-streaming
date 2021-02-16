@@ -80,16 +80,36 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+var all_users = [];
 io.on('connection', (socket) => {
   var current_room = 'none';
+  var current_nickname = 'unnamed_viewer';
+  var current_identifier = 'COMPUTER';
+
   socket.on('join room', function(room) {
     current_room = room;
     socket.join(current_room);
   });
 
-  socket.on('new message', function(usr, msg) {
-    socket.to(current_room).emit('new message', { username: usr, content: msg });
-  })
+  socket.on('login', function(username, identifier) {
+    current_nickname = username;
+    current_identifier = identifier;
+    var address = socket.handshake.address;
+    console.log(current_nickname + ' connected (' + current_identifier + '@' + address + ')');
+
+    socket.to(current_room).emit('joined', current_nickname);
+  });
+
+  socket.on('new message', function(msg) {
+    socket.to(current_room).emit('new message', { username: current_nickname, content: msg });
+  });
+
+  socket.on('disconnect', function() {
+    socket.to(current_room).emit('left', current_nickname);
+
+    var address = socket.handshake.address;
+    console.log(current_nickname + ' disconnected (' + current_identifier + '@' + address + ')');
+  });
 });
 
 server.listen(3000, '0.0.0.0', () => {

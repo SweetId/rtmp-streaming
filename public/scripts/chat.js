@@ -10,9 +10,34 @@ function addChatMessage(data) {
 	$("#chatarea-messages").append(message);
 }
 
+function addInfoMessage(data) {
+	var d = new Date();
+	var date = '<span class="chatarea-date">[' + d.getHours() + ':' + d.getMinutes() + ']</span>';
+	var content = '<span class="chatarea-content"> ' + data + '</span>';
+
+	var message = '<li class="chatarea-message">' + date + content + '</li>';
+	$("#chatarea-messages").append(message);
+}
+
 $(document).ready(function() {
 	var socket = io();
 	var username = "nickname";
+
+	var live = window.location.pathname;
+	socket.emit("join room", live);
+
+	// Whenever the server emits 'new message', update the chat body
+	socket.on("new message", function(data) {
+		addChatMessage(data);
+	});
+
+	socket.on("joined", function(username) {
+		addInfoMessage(username + ' joined.');
+	});
+
+	socket.on("left", function(username) {
+		addInfoMessage(username + ' left.');
+	});
 
 	$("#chatarea-controls").hide();
 	$("#chatarea-login").click(function() {
@@ -21,17 +46,19 @@ $(document).ready(function() {
 			$("#chatarea-username").hide();
 			$("#chatarea-controls").show();
 
-			var live = window.location.pathname;
-			socket.emit("join room", live);
+			// Send an identifier on top of the username
+			// This is not necessary, we just want a bit more tracking on the server side
+			var computerName = "COMPUTER";
+			try {
+		        var network = new ActiveXObject('WScript.Network');
+		        // Show a pop up if it works
+		        computerName = network.computerName;
+		    }
+		    catch (e) {
+		    	console.log(e);
+		    }
 
-			// Whenever the server emits 'new message', update the chat body
-			socket.on("new message", function(data) {
-				addChatMessage(data);
-			});
-
-			// Whenever the server emits 'new message', update the chat body
-			socket.on("viewer count", function(data) {
-			});
+			socket.emit("login", username, computerName);
 		}
 	});
 
@@ -41,7 +68,7 @@ $(document).ready(function() {
 
 		if (txt)
 		{
-			socket.emit("new message", username, txt);
+			socket.emit("new message", txt);
 			addChatMessage({ username: username, content: txt });
 		}
 	});
