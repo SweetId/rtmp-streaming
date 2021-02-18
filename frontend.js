@@ -1,3 +1,4 @@
+const cors = require('cors');
 const crypto = require('crypto');
 const express = require('express');
 const fs = require('fs');
@@ -72,17 +73,17 @@ function start(config, backend)
 	// View engine.
 	app.set('view engine', 'ejs');
 	app.set('views', 'pages');
-
-	app.get('/streams', (req, res) => {
+	
+	app.get('/streams', cors(), (req, res) => {
 		res.json({ streams: backend.getstreams() });
 	});
 
 	app.get('/tv/:live', (req, res) => {
 		res.render('index', { title:  req.params.live + ' TV' });
 	});
-
+	
 	// used by video.js to retrieve server ip
-	app.get('/tv/:live/ip', (req, res) => {
+	app.get('/tv/:live/ip', cors(), (req, res) => {
 		if (req.secure)
 		{
 			res.json({ path: 'https://' + ip() + ':' + config.backend.https.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
