@@ -24,13 +24,9 @@ const config = {
 			api: true,
 			api_user: 'admin',
 			api_pass: 'admin',
-			play: false,
+			play: true,
 			publish: false,
-			secret: 'nodemedia2017privatekey'
-		},
-		userauth: {
-			server: '127.0.0.1',
-			port: 3002,
+			secret: '00000000-0000-0000-0000-000000000000'
 		}
 	},
 	frontend : {

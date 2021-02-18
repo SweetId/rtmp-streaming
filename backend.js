@@ -1,4 +1,5 @@
 const NodeMediaServer = require('node-media-server');
+const uuid = require('uuid');
 
 // List of all public streams
 var all_streams = [];
@@ -6,6 +7,14 @@ var nms;
 
 function start(config)
 {
+	// Generate random key
+	if (config.backend.auth.play === true)
+	{
+		const guid = uuid.v4();
+		config.backend.auth.secret = guid;
+		console.log('secret guid: ' + config.backend.auth.secret);
+	}
+
 	// RTMP server and backend
 	nms = new NodeMediaServer(config.backend)
 	nms.run();
@@ -56,8 +65,6 @@ function start(config)
 
 	nms.on('prePlay', (id, StreamPath, args) => {
 		console.log('[NodeEvent on prePlay]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
-		// let session = nms.getSession(id);
-		// session.reject();
 	});
 
 	nms.on('postPlay', (id, StreamPath, args) => {
