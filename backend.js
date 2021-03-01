@@ -118,6 +118,10 @@ function start(config)
 				res.status(403);
 		}
 	});
+	
+	nms.nhs.app.get('/streams', (req, res) => {
+		res.json({ streams: getstreams() });
+	});
 }
 
 function getstreams() { return all_streams; }

@@ -66,6 +66,7 @@ function start(config, backend)
 		res.render('index', { title:  req.params.live + ' TV' });
 	});
 	
+	// Below are the frontend calls forwarded to backend
 	// used by video.js to retrieve server ip
 	app.get('/tv/:live/ip', cors(), (req, res) => {
 		var req_url = '';
@@ -76,6 +77,22 @@ function start(config, backend)
 		else
 		{
 			req_url = 'http://127.0.0.1:' + config.backend.http.port + '/tv/' + req.params.live + '/ip';
+		}
+
+		request(req_url, function(error, response, body) {
+			res.json(JSON.parse(body));
+		})
+	});
+	
+	app.get('/streams', cors(), (req, res) => {
+		var req_url = '';
+		if (req.secure)
+		{
+			req_url = 'https://127.0.0.1:' + config.backend.https.port + '/streams';
+		}
+		else
+		{
+			req_url = 'http://127.0.0.1:' + config.backend.http.port + '/streams';
 		}
 
 		request(req_url, function(error, response, body) {
