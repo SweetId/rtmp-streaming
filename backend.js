@@ -120,7 +120,26 @@ function start(config)
 	});
 	
 	nms.nhs.app.get('/streams', (req, res) => {
-		res.json({ streams: getstreams() });
+		if(req.secure)
+		{
+			if (config.backend.https.iptv_auth == false ||
+				(req.query.auth === config.backend.https.iptv_secret))
+			{
+				res.json({ streams: getstreams() });
+			}
+			else
+				res.status(403);
+		}
+		else
+		{
+			if (config.backend.http.iptv_auth == false ||
+				(req.query.auth === config.backend.http.iptv_secret))
+			{
+				res.json({ streams: getstreams() });
+			}
+			else
+				res.status(403);
+		}
 	});
 }
 
