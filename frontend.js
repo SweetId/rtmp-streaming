@@ -1,10 +1,10 @@
 const cors = require('cors');
-const crypto = require('crypto');
 const express = require('express');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const ip = require('my-ip');
+const request = require('request');
 
 var chatserver = require('./chatserver');
 
@@ -51,22 +51,6 @@ function start(config, backend)
 		io_https = chatserver.start(server_https);
 	}
 
-	// Noauth
-	var generate_auth_key = function(live) { return ''; }
-	if (config.backend.auth.play === true)
-	{
-		generate_auth_key = function(live) {
-			const md5 = crypto.createHash('md5');
-			let key = config.backend.auth.secret;
-
-			let exp = (Date.now() / 1000 |0) + (3600*24); // 1 day expiration delay
-			let stream = '/live/' + live;
-			
-			var token = exp + '-' + md5.update(stream + '-' + exp + '-' + key).digest('hex');
-			return '?sign=' + token;
-		}
-	}
-
 	// Allow use of files inside public/
 	app.use(express.static('public'));
 
@@ -84,14 +68,19 @@ function start(config, backend)
 	
 	// used by video.js to retrieve server ip
 	app.get('/tv/:live/ip', cors(), (req, res) => {
+		var req_url = '';
 		if (req.secure)
 		{
-			res.json({ path: 'https://' + ip() + ':' + config.backend.https.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
+			req_url = 'https://127.0.0.1:' + config.backend.https.port + '/tv/' + req.params.live + '/ip';
 		}
 		else
 		{
-			res.json({ path: 'http://' + ip() + ':' + config.backend.http.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
+			req_url = 'http://127.0.0.1:' + config.backend.http.port + '/tv/' + req.params.live + '/ip';
 		}
+
+		request(req_url, function(error, response, body) {
+			res.json(JSON.parse(body));
+		})
 	});
 }
 

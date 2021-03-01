@@ -1,5 +1,8 @@
-const NodeMediaServer = require('node-media-server');
+const crypto = require('crypto');
+const ip = require('my-ip');
 const uuid = require('uuid');
+
+const NodeMediaServer = require('node-media-server');
 
 // List of all public streams
 var all_streams = [];
@@ -73,6 +76,47 @@ function start(config)
 
 	nms.on('donePlay', (id, StreamPath, args) => {
 		console.log('[NodeEvent on donePlay]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+	});
+
+	// Noauth
+	var generate_auth_key = function(live) { return ''; }
+	if (config.backend.auth.play === true)
+	{
+		generate_auth_key = function(live) {
+			const md5 = crypto.createHash('md5');
+			let key = config.backend.auth.secret;
+
+			let exp = (Date.now() / 1000 |0) + (3600*24); // 1 day expiration delay
+			let stream = '/live/' + live;
+			
+			var token = exp + '-' + md5.update(stream + '-' + exp + '-' + key).digest('hex');
+			return '?sign=' + token;
+		}
+	}
+
+	// used by video.js to retrieve server ip
+	// here we plug directly to the backend server
+	nms.nhs.app.get('/tv/:live/ip', (req, res) => {
+		if(req.secure)
+		{
+			if (config.backend.https.iptv_auth == false ||
+				(req.query.auth === config.backend.https.iptv_secret))
+			{
+				res.json({ path: 'https://' + ip() + ':' + config.backend.https.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
+			}
+			else
+				res.status(403);
+		}
+		else
+		{
+			if (config.backend.http.iptv_auth == false ||
+				(req.query.auth === config.backend.http.iptv_secret))
+			{
+				res.json({ path: 'http://' + ip() + ':' + config.backend.http.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
+			}
+			else
+				res.status(403);
+		}
 	});
 }
 

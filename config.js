@@ -13,12 +13,18 @@ const config = {
 			mediaroot: './media',
 			webroot: './www',
 			allow_origin: '*',
-			api: true
+			api: true,
+
+			iptv_auth: false,
+			iptv_secret: '',
 		},
 		https: {
 			port: 8443,
 			key: './privatekey.pem',
 			cert: './certificate.pem',
+
+			iptv_auth: false,
+			iptv_secret: '',
 		},
 		auth: {
 			api: true,
@@ -30,6 +36,9 @@ const config = {
 		}
 	},
 	frontend : {
+		http: {
+			port: 3000,
+		},
 		https: {
 			port: 3001,
 			key: './privatekey.pem',
