@@ -105,7 +105,7 @@ function start(config)
 				res.json({ path: 'https://' + ip() + ':' + config.backend.https.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
 			}
 			else
-				res.status(403);
+				res.status(403).json({ error: 'Not authorized' });
 		}
 		else
 		{
@@ -115,7 +115,7 @@ function start(config)
 				res.json({ path: 'http://' + ip() + ':' + config.backend.http.port + '/live/' + req.params.live + '.flv' + generate_auth_key(req.params.live) });
 			}
 			else
-				res.status(403);
+				res.status(403).json({ error: 'Not authorized' });
 		}
 	});
 	
@@ -128,7 +128,7 @@ function start(config)
 				res.json({ streams: getstreams() });
 			}
 			else
-				res.status(403);
+				res.status(403).json({ error: 'Not authorized' });
 		}
 		else
 		{
@@ -138,7 +138,7 @@ function start(config)
 				res.json({ streams: getstreams() });
 			}
 			else
-				res.status(403);
+				res.status(403).json({ error: 'Not authorized' });
 		}
 	});
 }
